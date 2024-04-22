@@ -1,7 +1,3 @@
-Certainly! Here's the updated summary with the addition:
-
----
-
 ## Expression Converter
 
 The Expression Converter is a C program designed to convert infix expressions to postfix and prefix forms. It utilizes a stack-based algorithm to perform the conversion efficiently. This tool finds applications not only in general programming tasks but also in Data Structures and Algorithms (DSA), particularly in expression evaluation and parsing algorithms.
