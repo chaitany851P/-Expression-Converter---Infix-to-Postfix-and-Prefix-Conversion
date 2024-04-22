@@ -1,0 +1,146 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h> // Include ctype.h for isalnum function
+
+#define MAX_SIZE 100
+
+int precedence(char operator) {
+    if (operator == '+' || operator == '-')
+        return 1;
+    if (operator == '*' || operator == '/')
+        return 2;
+    return 0;  // Lower precedence for non-operators
+}
+
+void infixToPostfix(char *infix, char *postfix) {
+    char stack[MAX_SIZE];
+    int top = -1; // Stack initialization
+    int pos = 0; // Position in the postfix array
+
+    for (int i = 0; infix[i]; i++) {
+        char token = infix[i];
+
+        if (isalnum(token)) {
+            postfix[pos++] = token;
+        } else if (token == '(') {
+            stack[++top] = token;
+        } else if (token == ')') {
+            while (top >= 0 && stack[top] != '(') {
+                postfix[pos++] = stack[top--];
+            }
+            if (top >= 0 && stack[top] == '(') {
+                top--;  // Pop '('
+            }
+        } else {
+            while (top >= 0 && precedence(stack[top]) >= precedence(token)) {
+                postfix[pos++] = stack[top--];
+            }
+            stack[++top] = token;
+        }
+    }
+
+    while (top >= 0) {
+        postfix[pos++] = stack[top--];
+    }
+    postfix[pos] = '\0';
+}
+
+void reverseString(char *str) {
+    int len = strlen(str);
+    for (int i = 0; i < len / 2; i++) {
+        char temp = str[i];
+        str[i] = str[len - i - 1];
+        str[len - i - 1] = temp;
+    }
+}
+
+void infixToPrefix(char *infix, char *prefix) {
+    char stack[MAX_SIZE];
+    int top = -1; // Stack initialization
+    int pos = 0; // Position in the prefix array
+
+    reverseString(infix);
+
+    for (int i = 0; infix[i]; i++) {
+        char token = infix[i];
+
+        if (isalnum(token)) {
+            prefix[pos++] = token;
+        } else if (token == ')') {
+            stack[++top] = token;
+        } else if (token == '(') {
+            while (top >= 0 && stack[top] != ')') {
+                prefix[pos++] = stack[top--];
+            }
+            if (top >= 0 && stack[top] == ')') {
+                top--;  // Pop ')'
+            }
+        } else {
+            while (top >= 0 && precedence(stack[top]) >= precedence(token)) {
+                prefix[pos++] = stack[top--];
+            }
+            stack[++top] = token;
+        }
+    }
+
+    while (top >= 0) {
+        prefix[pos++] = stack[top--];
+    }
+    reverseString(prefix);
+    prefix[pos] = '\0';
+}
+
+int main() {
+    
+    printf("\n");
+    printf("***********************************************************************\n");
+    printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+    printf("\n------------------------ EXPRESSION CONVERTER-------------------------\n\n");
+    printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+    printf("***********************************************************************\n");
+    
+    
+    char infix[MAX_SIZE];
+    char postfix[MAX_SIZE] = "";
+    char prefix[MAX_SIZE] = "";  // Declare prefix here
+   
+    char n;
+    int a;
+   
+    do {
+        printf("\n\n");
+        printf("1. Infix to postfix\n");
+        printf("2. Infix to prefix\n");
+        printf("Enter your choice: ");
+        scanf("%d", &a);
+   
+        printf("Enter an infix expression: ");
+        getchar(); // Consume the newline character
+        fgets(infix, sizeof(infix), stdin);
+   
+        switch (a) {
+            case 1:
+                infixToPostfix(infix, postfix);
+                printf("Postfix expression: %s\n", postfix);
+                break;
+            case 2:
+                infixToPrefix(infix, prefix);
+                printf("Prefix expression: %s\n", prefix);
+                break;
+        }
+   
+        printf("Do you want to do more expressions (y-yes/n-no)? ");
+        //printf("\n\n");
+        
+        // Consume the newline character
+        scanf("%c", &n);
+    } while (n == 'y' || n == 'Y');
+    
+    printf("\n\n");
+    printf("!!!!!!!!!! Thanks for using us !!!!!!!!!!!!");
+    printf("\n");
+    printf("!!!!!!!!!! Have Good Day !!!!!!!!!!!!");
+
+    return 0;
+}
